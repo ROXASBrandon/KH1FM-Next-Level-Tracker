@@ -1,0 +1,15 @@
+title: Next Level Tracker
+originalAuthor: ROXASBrandon
+description: >
+  Track EXP remaining to Sora's next level with a minimal HUD popup after EXP gains.
+  Press F6 to preview the counter. Steam Global 1.0.0.2 and LuaBackend required.
+game: kh1
+assets:
+  - name: scripts/kh1_next_level_popup.lua
+    method: copy
+    source:
+      - name: scripts/kh1_next_level_popup.lua
+  - name: scripts/io_packages/kh1_next_level_popup.dll
+    method: copy
+    source:
+      - name: scripts/io_packages/kh1_next_level_popup.dll
