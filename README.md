@@ -6,14 +6,6 @@
 
 Keep your next level in sight! A small **NEXT LEVEL** label and remaining EXP appear below the upper-left Scan HP bar whenever Sora gains EXP. Press **F6** to check the counter without needing a fight.
 
-## v0.1.3: gameplay detection fix
-
-The EXP popup and F6 preview could remain suppressed despite successful helper initialization. This update fixes false cutscene detection from persistent event flags.
-
-The author confirmed F6 preview works after restarting with the corrected gameplay check. EXP-gain behavior was not separately retested for this fix.
-
-**Updating:** Close KH1 normally, replace the old mod copy, keep only one copy enabled, then use OpenKH **Build and Run**. Fully restart after updating; F1 reload cannot replace a native helper.
-
 ## Features
 
 - Minimal two-line popup using the game's native font and fading animation.
