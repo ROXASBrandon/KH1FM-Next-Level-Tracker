@@ -30,7 +30,7 @@ static unsigned char title[32], body[32];
 static int32_t purple_box[4] = {94, 56, 156, 128};
 static int32_t purple_text[4] = {190, 156, 255, 128};
 
-__declspec(dllexport) volatile uint32_t nextlevel_build = 102;
+__declspec(dllexport) volatile uint32_t nextlevel_build = 103;
 __declspec(dllexport) volatile uint32_t nextlevel_status; /* 0 waiting, 1 ready, 2 refused */
 __declspec(dllexport) volatile uint32_t nextlevel_frames;
 __declspec(dllexport) volatile uint32_t nextlevel_popups;
@@ -240,20 +240,24 @@ static int show(uintptr_t save, uintptr_t actor, unsigned level, uint32_t remain
     return 0;
 }
 
-static void tick(uint64_t now) {
-    ++nextlevel_frames;
-    NextLevelSample s={0};
-    s.save=pointer(game+0x2868BA0); s.actor=pointer(game+0x2537E48);
-    int visible=now-(uint64_t)InterlockedCompareExchange64(&lease,0,0)<2000 &&
-        readable(s.save,0x492) && readable(s.actor,0x378) &&
-        (u32(s.actor+0x374)&3)==1 && u32(s.actor+0x130) &&
+/* Low event bits suppress input/HUD; 0x18 can persist in normal gameplay. */
+static int sample_gameplay(NextLevelSample *s,uint64_t now) {
+    s->save=pointer(game+0x2868BA0); s->actor=pointer(game+0x2537E48);
+    return now-(uint64_t)InterlockedCompareExchange64(&lease,0,0)<2000 &&
+        readable(s->save,0x492) && readable(s->actor,0x378) &&
+        (u32(s->actor+0x374)&3)==1 && u32(s->actor+0x130) &&
         *(unsigned char *)(game+0x2D5CC4C)>0 &&
         *(float *)(game+0x281249C)>0.5f &&
         !*(unsigned char *)(game+0x22EC0AC) &&
-        !*(unsigned char *)(game+0x23AB2D0) &&
+        !(*(unsigned char *)(game+0x23AB2D0)&7u) &&
         !*(unsigned char *)(game+0x233E808) &&
         !u32(game+0x5075A8) && !*(unsigned char *)(game+0x232DFC0) &&
         !*(unsigned char *)(game+0x2E20564);
+}
+static void tick(uint64_t now) {
+    ++nextlevel_frames;
+    NextLevelSample s={0};
+    int visible=sample_gameplay(&s,now);
     DWORD foreground=0;
     GetWindowThreadProcessId(GetForegroundWindow(),&foreground);
     int f6=foreground==GetCurrentProcessId() && (GetAsyncKeyState(VK_F6)&0x8000)!=0;

@@ -1,4 +1,4 @@
--- Next Level Popup v0.1.2, Steam Global 1.0.0.2 / LuaBackend.
+-- Next Level Popup v0.1.3, Steam Global 1.0.0.2 / LuaBackend.
 -- Native HUD notifications. EXP, level, rewards and saves are read-only.
 LUAGUI_NAME = "Next Level Tracker"
 LUAGUI_AUTH = "ROXASBrandon"
